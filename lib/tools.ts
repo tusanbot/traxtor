@@ -14,6 +14,8 @@ export type Tool = {
   category: string;
   icon: typeof Trophy;
   available: boolean;
+  themeIds?: string[];
+  supportsCustomFields?: boolean;
 };
 
 export const tools: Tool[] = [
@@ -25,6 +27,8 @@ export const tools: Tool[] = [
     category: "آمار و رتبه‌بندی",
     icon: Trophy,
     available: true,
+    themeIds: ["tractor-red", "stadium-night", "classic-red"],
+    supportsCustomFields: true,
   },
   {
     id: "lineup",
@@ -34,6 +38,7 @@ export const tools: Tool[] = [
     category: "ترکیب",
     icon: Users,
     available: true,
+    themeIds: ["tractor-red", "stadium-night", "classic-red"],
   },
   {
     id: "player-card",
@@ -43,6 +48,7 @@ export const tools: Tool[] = [
     category: "بازیکنان",
     icon: CircleUserRound,
     available: true,
+    themeIds: ["tractor-red", "stadium-night", "classic-red"],
   },
   {
     id: "team-stats",
