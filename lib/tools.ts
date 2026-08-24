@@ -8,6 +8,7 @@ import {
   Users,
   Table2,
   ArrowLeftRight,
+  Award,
 } from "lucide-react";
 
 export type Tool = { id: string; title: string; description: string; category: string; icon: typeof Trophy; available: boolean; themeIds?: string[]; supportsCustomFields?: boolean };
@@ -20,6 +21,7 @@ export const tools: Tool[] = [
   { id: "news-card", title: "طرح خبر", description: "ساخت کارت گرافیکی حرفه‌ای برای اخبار و اطلاعیه‌های فوتبالی.", category: "اخبار", icon: Newspaper, available: true, themeIds: ["tractor-red", "stadium-night", "classic-red"], supportsCustomFields: true },
   { id: "league-table", title: "جدول لیگ", description: "ساخت طرح گرافیکی جدول مسابقات با امکان برجسته‌سازی تیم موردنظر.", category: "مسابقات", icon: Table2, available: true, themeIds: ["tractor-red", "stadium-night", "classic-red"], supportsCustomFields: true },
   { id: "transfer", title: "طرح نقل‌وانتقال", description: "ساخت طرح اختصاصی برای انتقال بازیکن، ورود، خروج و وضعیت قرارداد.", category: "نقل‌وانتقالات", icon: ArrowLeftRight, available: true, themeIds: ["tractor-red", "stadium-night", "classic-red"], supportsCustomFields: true },
+  { id: "player-week", title: "بازیکن هفته", description: "ساخت طرح افتخاری بازیکن برتر هفته با تصویر و آمار عملکرد.", category: "بازیکنان", icon: Award, available: true, themeIds: ["tractor-red", "stadium-night", "classic-red"], supportsCustomFields: true },
   { id: "match-result", title: "نتیجه بازی", description: "ساخت طرح نتیجه مسابقه با لوگو، نتیجه و اطلاعات بازی.", category: "مسابقات", icon: Shield, available: false },
   { id: "custom-template", title: "قالب اختصاصی", description: "ساخت و شخصی‌سازی قالب‌های گرافیکی برای رسانه.", category: "قالب‌ها", icon: LayoutTemplate, available: false },
 ];
