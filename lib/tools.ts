@@ -1,7 +1,5 @@
-import {
-  BarChart3, CircleUserRound, LayoutTemplate, Newspaper, Shield, Trophy, Users, Table2, ArrowLeftRight, Award,
-} from "lucide-react";
-export type Tool = { id:string; title:string; description:string; category:string; icon:typeof Trophy; available:boolean; themeIds?:string[]; supportsCustomFields?:boolean };
+import { BarChart3, CircleUserRound, LayoutTemplate, Newspaper, Shield, Trophy, Users, Table2, ArrowLeftRight, Award } from "lucide-react";
+export type Tool={id:string;title:string;description:string;category:string;icon:typeof Trophy;available:boolean;themeIds?:string[];supportsCustomFields?:boolean};
 export const tools:Tool[]=[
 {id:"top-players",title:"۵ بازیکن برتر",description:"ساخت طرح حرفه‌ای رتبه‌بندی پنج بازیکن برتر با عکس، تیم و امتیاز.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"lineup",title:"ترکیب تیم",description:"ساخت شماتیک ترکیب تیم روی زمین فوتبال با آرایش دلخواه.",category:"ترکیب",icon:Users,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
@@ -12,5 +10,6 @@ export const tools:Tool[]=[
 {id:"transfer",title:"طرح نقل‌وانتقال",description:"ساخت طرح اختصاصی برای انتقال بازیکن، ورود، خروج و وضعیت قرارداد.",category:"نقل‌وانتقالات",icon:ArrowLeftRight,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"player-week",title:"بازیکن هفته",description:"ساخت طرح افتخاری بازیکن برتر هفته با تصویر و آمار عملکرد.",category:"بازیکنان",icon:Award,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"match-result",title:"نتیجه بازی",description:"ساخت طرح نتیجه مسابقه با لوگو، نتیجه و اطلاعات بازی.",category:"مسابقات",icon:Shield,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
+{id:"match-stats",title:"آمار بازی",description:"ساخت طرح گرافیکی مقایسه آمار مسابقه بین دو تیم.",category:"آمار",icon:BarChart3,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"custom-template",title:"قالب اختصاصی",description:"ساخت و شخصی‌سازی قالب‌های گرافیکی برای رسانه.",category:"قالب‌ها",icon:LayoutTemplate,available:false},
 ];
