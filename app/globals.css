@@ -1,43 +1,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #080b12;
-  --foreground: #f8fafc;
-  --card: #10151f;
-  --card-border: rgba(255, 255, 255, 0.08);
-  --muted: #94a3b8;
-  --primary: #16a34a;
-  --primary-dark: #15803d;
-}
+:root { --background:#080b12; --foreground:#f8fafc; --card:#10151f; --card-border:rgba(255,255,255,.08); --muted:#94a3b8; --primary:#16a34a; --primary-dark:#15803d; }
+* { box-sizing:border-box; }
+html { direction:rtl; }
+body { margin:0; min-height:100vh; background:var(--background); color:var(--foreground); font-family:"Vazirmatn",sans-serif; }
+button,input,textarea,select { font:inherit; }
+button { cursor:pointer; }
+::selection { background:rgba(215,25,32,.3); }
 
-* {
-  box-sizing: border-box;
-}
+section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto,
+section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto { overflow:hidden!important; padding:0!important; container-type:inline-size; }
+section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"],
+section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"] { transform:none!important; margin-bottom:0!important; zoom:clamp(.28,calc(100cqw / 1080px),.5); }
 
-html {
-  direction: rtl;
-}
+/* Subtle football / supporter atmosphere without affecting the exported artwork dimensions. */
+section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::before,
+section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::before { content:"⚽"; position:absolute; z-index:1; right:-40px; bottom:60px; font-size:310px; line-height:1; opacity:.035; filter:grayscale(1); pointer-events:none; }
+section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::after,
+section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::after { content:"🐺"; position:absolute; z-index:1; left:-35px; top:250px; font-size:280px; line-height:1; opacity:.035; filter:grayscale(1); pointer-events:none; }
+section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"] img[alt=""],
+section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"] img[alt=""] { border-radius:9999px; }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Vazirmatn", sans-serif;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-::selection {
-  background: rgba(34, 197, 94, 0.3);
-}
+@media (max-width:640px) { section.flex.justify-center,section.flex.items-start.justify-center { padding:0!important; } }
