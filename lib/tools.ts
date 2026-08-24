@@ -54,7 +54,9 @@ export const tools: Tool[] = [
     description: "نمایش آمار و عملکرد یک تیم در قالب یک طرح گرافیکی.",
     category: "آمار",
     icon: BarChart3,
-    available: false,
+    available: true,
+    themeIds: ["tractor-red", "stadium-night", "classic-red"],
+    supportsCustomFields: true,
   },
   {
     id: "match-result",
