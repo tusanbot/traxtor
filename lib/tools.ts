@@ -14,5 +14,6 @@ export const tools:Tool[]=[
 {id:"player-comparison",title:"مقایسه دو بازیکن",description:"مقایسه حرفه‌ای دو بازیکن با عکس، مشخصات و آمار قابل تنظیم.",category:"بازیکنان",icon:GitCompareArrows,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"top-scorers",title:"گلزنان برتر",description:"ساخت طرح رتبه‌بندی گلزنان با عکس، شماره و آمار قابل تنظیم.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"top-assists",title:"برترین پاسورها",description:"ساخت طرح رتبه‌بندی پاس گل با عکس، شماره و آمار قابل تنظیم.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
+{id:"goalkeepers",title:"برترین دروازه‌بان‌ها",description:"ساخت طرح رتبه‌بندی دروازه‌بان‌ها بر اساس کلین‌شیت و آمار دروازه‌بانی.",category:"آمار و رتبه‌بندی",icon:Award,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"custom-template",title:"قالب اختصاصی",description:"ساخت و شخصی‌سازی قالب‌های گرافیکی برای رسانه.",category:"قالب‌ها",icon:LayoutTemplate,available:false},
 ];
