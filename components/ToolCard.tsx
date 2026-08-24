@@ -24,6 +24,7 @@ export default function ToolCard({ tool }: Props) {
   const routes: Record<string, string> = {
     "top-players": "/tools/top-players",
     lineup: "/tools/lineup",
+    "player-card": "/tools/player-card",
   };
 
   if (tool.available && routes[tool.id]) {
