@@ -21,8 +21,13 @@ export default function ToolCard({ tool }: Props) {
     </div>
   );
 
-  if (tool.id === "top-players" && tool.available) {
-    return <Link href="/tools/top-players" className="block h-full">{content}</Link>;
+  const routes: Record<string, string> = {
+    "top-players": "/tools/top-players",
+    lineup: "/tools/lineup",
+  };
+
+  if (tool.available && routes[tool.id]) {
+    return <Link href={routes[tool.id]} className="block h-full">{content}</Link>;
   }
 
   return <div className="h-full">{content}</div>;
