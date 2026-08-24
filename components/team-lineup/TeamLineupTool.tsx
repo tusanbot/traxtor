@@ -1,91 +1,44 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
-import { toPng } from "html-to-image";
+import { useRef, useState } from "react";
 import { Download, ImagePlus, RotateCcw, Upload } from "lucide-react";
+import { toPng } from "html-to-image";
 
-type Player = { name: string; number: string; position: string; image: string };
-
-const formationPositions: Record<string, { x: number; y: number; role: string }[]> = {
-  "4-3-3": [
-    { x: 50, y: 91, role: "GK" }, { x: 15, y: 73, role: "DF" }, { x: 38, y: 76, role: "DF" }, { x: 62, y: 76, role: "DF" }, { x: 85, y: 73, role: "DF" },
-    { x: 25, y: 52, role: "MF" }, { x: 50, y: 57, role: "MF" }, { x: 75, y: 52, role: "MF" },
-    { x: 18, y: 27, role: "FW" }, { x: 50, y: 20, role: "FW" }, { x: 82, y: 27, role: "FW" },
-  ],
-  "4-2-3-1": [
-    { x: 50, y: 91, role: "GK" }, { x: 15, y: 73, role: "DF" }, { x: 38, y: 76, role: "DF" }, { x: 62, y: 76, role: "DF" }, { x: 85, y: 73, role: "DF" },
-    { x: 35, y: 56, role: "MF" }, { x: 65, y: 56, role: "MF" }, { x: 20, y: 34, role: "MF" }, { x: 50, y: 31, role: "MF" }, { x: 80, y: 34, role: "MF" }, { x: 50, y: 17, role: "FW" },
-  ],
-  "3-4-3": [
-    { x: 50, y: 91, role: "GK" }, { x: 28, y: 73, role: "DF" }, { x: 50, y: 77, role: "DF" }, { x: 72, y: 73, role: "DF" },
-    { x: 10, y: 49, role: "MF" }, { x: 35, y: 54, role: "MF" }, { x: 65, y: 54, role: "MF" }, { x: 90, y: 49, role: "MF" },
-    { x: 20, y: 25, role: "FW" }, { x: 50, y: 19, role: "FW" }, { x: 80, y: 25, role: "FW" },
-  ],
+type Player = { name: string; number: string; position: string; image: string; x: number; y: number };
+const presets: Record<string, { x: number; y: number }[]> = {
+  "4-3-3": [{x:50,y:91},{x:15,y:73},{x:38,y:76},{x:62,y:76},{x:85,y:73},{x:25,y:52},{x:50,y:57},{x:75,y:52},{x:18,y:27},{x:50,y:20},{x:82,y:27}],
+  "4-2-3-1": [{x:50,y:91},{x:15,y:73},{x:38,y:76},{x:62,y:76},{x:85,y:73},{x:35,y:56},{x:65,y:56},{x:20,y:34},{x:50,y:31},{x:80,y:34},{x:50,y:17}],
+  "3-4-3": [{x:50,y:91},{x:28,y:73},{x:50,y:77},{x:72,y:73},{x:10,y:49},{x:35,y:54},{x:65,y:54},{x:90,y:49},{x:20,y:25},{x:50,y:19},{x:80,y:25}],
 };
+const fa=(v:string)=>v.replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
+const blank=()=>Array.from({length:11},(_,i)=>({name:"",number:"",position:"",image:"",...presets["4-3-3"][i]}));
+const read=(file:File,set:(v:string)=>void)=>{const r=new FileReader();r.onload=()=>set(String(r.result));r.readAsDataURL(file)};
 
-const fa = (value: string) => value.replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
-const toDataUrl = (file: File, set: (value: string) => void) => { const r = new FileReader(); r.onload = () => set(String(r.result)); r.readAsDataURL(file); };
-
-export default function TeamLineupTool() {
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const [formation, setFormation] = useState<keyof typeof formationPositions>("4-3-3");
-  const [title, setTitle] = useState("ترکیب تراکتور");
-  const [subtitle, setSubtitle] = useState("MATCH LINEUP");
-  const [brand, setBrand] = useState("@tractorfan1970");
-  const [match, setMatch] = useState("ترکیب احتمالی");
-  const [logo, setLogo] = useState("");
-  const [players, setPlayers] = useState<Player[]>(Array.from({ length: 11 }, () => ({ name: "", number: "", position: "", image: "" })));
-  const [downloading, setDownloading] = useState(false);
-
-  const positions = useMemo(() => formationPositions[formation], [formation]);
-  const update = (i: number, key: keyof Player, value: string) => setPlayers((p) => p.map((x, n) => n === i ? { ...x, [key]: value } : x));
-  const reset = () => { setFormation("4-3-3"); setTitle("ترکیب تراکتور"); setSubtitle("MATCH LINEUP"); setBrand("@tractorfan1970"); setMatch("ترکیب احتمالی"); setLogo(""); setPlayers(Array.from({ length: 11 }, () => ({ name: "", number: "", position: "", image: "" }))); };
-
-  const download = async () => {
-    if (!canvasRef.current) return;
-    setDownloading(true);
-    try {
-      const data = await toPng(canvasRef.current, { width: 1080, height: 1350, pixelRatio: 2, cacheBust: true });
-      const a = document.createElement("a"); a.download = "tractor-lineup.png"; a.href = data; a.click();
-    } finally { setDownloading(false); }
-  };
-
-  return <main className="min-h-screen bg-[#070707] px-4 py-8 text-white md:px-8">
-    <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[390px_1fr]">
-      <section className="rounded-3xl border border-white/10 bg-[#111] p-5">
-        <span className="text-xs font-bold tracking-widest text-[#d4a72c]">TRAXTOR LINEUP TOOL</span>
-        <h1 className="mt-2 text-2xl font-black">شماتیک ترکیب تیم</h1>
-        <p className="mt-2 text-sm leading-6 text-white/45">آرایش، بازیکنان و اطلاعات مسابقه را وارد کنید.</p>
-        <div className="mt-6 space-y-4">
-          <label className="block text-sm">عنوان<input value={title} onChange={e => setTitle(e.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-[#d71920]" /></label>
-          <label className="block text-sm">زیرعنوان<input value={subtitle} onChange={e => setSubtitle(e.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-[#d71920]" /></label>
-          <label className="block text-sm">عنوان مسابقه / وضعیت<input value={match} onChange={e => setMatch(e.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-[#d4a72c]" /></label>
-          <label className="block text-sm">آیدی رسانه<input value={brand} onChange={e => setBrand(e.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:border-[#d71920]" /></label>
-          <label className="block text-sm">آرایش
-            <select value={formation} onChange={e => setFormation(e.target.value as keyof typeof formationPositions)} className="mt-2 w-full rounded-xl border border-white/10 bg-[#181818] px-4 py-3 outline-none"><option>4-3-3</option><option>4-2-3-1</option><option>3-4-3</option></select>
-          </label>
-          <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-white/15 bg-black/20 px-4 py-3 text-sm"><span className="flex items-center gap-2"><Upload size={16}/> لوگوی رسانه</span><input type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && toDataUrl(e.target.files[0], setLogo)} /><span className="text-xs text-[#d4a72c]">انتخاب</span></label>
-          <div className="h-px bg-white/10" />
-          {players.map((p, i) => <div key={i} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-            <div className="mb-3 flex items-center justify-between"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#d71920] text-sm font-black">{fa(String(i + 1))}</span><label className="flex cursor-pointer items-center gap-1 text-xs text-white/50"><ImagePlus size={15}/> عکس<input type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && toDataUrl(e.target.files[0], v => update(i, "image", v))}/></label></div>
-            <div className="grid grid-cols-[1fr_72px] gap-2"><input placeholder="نام بازیکن" value={p.name} onChange={e => update(i,"name",e.target.value)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-[#d71920]"/><input placeholder="شماره" value={p.number} onChange={e => update(i,"number",e.target.value)} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-[#d4a72c]"/><input placeholder="پست اختیاری" value={p.position} onChange={e => update(i,"position",e.target.value)} className="col-span-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-[#d71920]"/></div>
-          </div>)}
-          <div className="flex gap-2"><button onClick={download} disabled={downloading} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#d71920] px-4 py-3 font-bold hover:bg-[#ef1d25] disabled:opacity-50"><Download size={18}/>{downloading ? "در حال ساخت..." : "دانلود PNG"}</button><button onClick={reset} className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5"><RotateCcw size={18}/></button></div>
-        </div>
-      </section>
-
-      <section className="flex items-start justify-center rounded-3xl border border-white/10 bg-[#0d0d0d] p-3 md:p-6"><div className="w-full max-w-[540px] overflow-auto rounded-2xl bg-black p-2"><div ref={canvasRef} style={{ width:1080,height:1350,transform:"scale(.5)",transformOrigin:"top left",marginBottom:-675 }} className="relative overflow-hidden bg-[#090909] text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_10%,rgba(215,25,32,.35),transparent_28%),radial-gradient(circle_at_20%_90%,rgba(212,167,44,.12),transparent_30%)]"/><div className="absolute inset-x-0 top-0 h-[18px] bg-[#d71920]"/><div className="relative h-full px-[70px] py-[58px]">
-          <div className="flex items-start justify-between"><div><div className="text-[24px] font-black tracking-[8px] text-[#d4a72c]">TRAXTOR</div><h2 className="mt-2 text-[60px] font-black leading-none">{title}</h2><div className="mt-3 text-[22px] font-bold tracking-[6px] text-white/35">{subtitle}</div><div className="mt-4 inline-block rounded-full border border-[#d4a72c]/40 px-5 py-2 text-[20px] font-bold text-[#d4a72c]">{match}</div></div>{logo ? <img src={logo} alt="" className="h-[100px] w-[100px] object-contain"/> : <div className="flex h-[100px] w-[100px] items-center justify-center rounded-full border-4 border-[#d71920] text-[34px] font-black">T</div>}</div>
-          <div className="relative mt-10 h-[930px] overflow-hidden rounded-[42px] border border-white/10 bg-[#101912] shadow-2xl">
-            <div className="absolute inset-0 opacity-50" style={{backgroundImage:"linear-gradient(rgba(255,255,255,.05) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.05) 2px,transparent 2px)",backgroundSize:"68px 68px"}}/>
-            <div className="absolute inset-[42px] rounded-[28px] border-2 border-white/15"/><div className="absolute left-[50%] top-[50%] h-[130px] w-[130px] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/15"/><div className="absolute left-[8%] right-[8%] top-[50%] h-px bg-white/15"/>
-            <div className="absolute left-[8%] right-[8%] top-[4%] h-[150px] rounded-b-[40px] border-b-2 border-l-2 border-r-2 border-white/15"/><div className="absolute bottom-[4%] left-[8%] right-[8%] h-[150px] rounded-t-[40px] border-l-2 border-r-2 border-t-2 border-white/15"/>
-            {positions.map((pos, i) => { const p = players[i]; return <div key={i} className="absolute -translate-x-1/2 -translate-y-1/2" style={{left:`${pos.x}%`,top:`${pos.y}%`}}><div className="relative flex h-[118px] w-[118px] items-center justify-center rounded-full border-[6px] border-[#d71920] bg-[#141414] shadow-[0_10px_30px_rgba(0,0,0,.5)]">{p.image ? <img src={p.image} alt="" className="h-full w-full rounded-full object-cover"/> : <span className="text-[30px] font-black text-white/20">{fa(String(i+1))}</span>}<span className="absolute -right-2 -top-2 flex h-[38px] w-[38px] items-center justify-center rounded-full bg-[#d4a72c] text-[19px] font-black text-black">{fa(p.number || String(i+1))}</span></div><div className="mt-2 min-w-[150px] rounded-xl border border-white/10 bg-black/70 px-3 py-2 text-center backdrop-blur"><div className="text-[22px] font-black">{p.name || `بازیکن ${fa(String(i+1))}`}</div><div className="text-[15px] font-bold text-[#d4a72c]">{p.position || pos.role}</div></div></div>})}
-          </div>
-          <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-5 text-[18px] font-bold tracking-[3px] text-white/30"><span>{brand}</span><span className="text-[#d4a72c]">TRACTOR SC</span></div>
-        </div>
-      </div></div></section>
+export default function TeamLineupTool(){
+ const canvas=useRef<HTMLDivElement>(null); const [formation,setFormation]=useState("4-3-3"); const [title,setTitle]=useState("ترکیب تراکتور"); const [subtitle,setSubtitle]=useState("MATCH LINEUP"); const [tournament,setTournament]=useState("لیگ برتر ایران"); const [coach,setCoach]=useState("نام سرمربی"); const [coachImage,setCoachImage]=useState(""); const [brand,setBrand]=useState("@tractorfan1970"); const [match,setMatch]=useState("ترکیب احتمالی"); const [logo,setLogo]=useState(""); const [players,setPlayers]=useState<Player[]>(blank); const [downloading,setDownloading]=useState(false); const [drag,setDrag]=useState<number|null>(null);
+ const applyFormation=(value:string)=>{setFormation(value);setPlayers(p=>p.map((x,i)=>({...x,...presets[value][i]})))};
+ const update=(i:number,k:keyof Player,v:string)=>setPlayers(p=>p.map((x,n)=>n===i?{...x,[k]:v}:x));
+ const move=(i:number,e:React.PointerEvent)=>{const el=canvas.current?.querySelector("[data-pitch]") as HTMLElement|null;if(!el)return;const r=el.getBoundingClientRect();const x=Math.max(4,Math.min(96,((e.clientX-r.left)/r.width)*100));const y=Math.max(4,Math.min(96,((e.clientY-r.top)/r.height)*100));setPlayers(p=>p.map((xv,n)=>n===i?{...xv,x,y}:xv));};
+ const download=async()=>{if(!canvas.current)return;setDownloading(true);try{const u=await toPng(canvas.current,{width:1080,height:1350,pixelRatio:2,cacheBust:true});const a=document.createElement("a");a.download="tractor-lineup.png";a.href=u;a.click()}finally{setDownloading(false)}};
+ const reset=()=>{setFormation("4-3-3");setTitle("ترکیب تراکتور");setSubtitle("MATCH LINEUP");setTournament("لیگ برتر ایران");setCoach("نام سرمربی");setCoachImage("");setBrand("@tractorfan1970");setMatch("ترکیب احتمالی");setLogo("");setPlayers(blank())};
+ return <main className="min-h-screen bg-[#070707] px-4 py-8 text-white md:px-8"><div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[390px_1fr]">
+  <section className="rounded-3xl border border-white/10 bg-[#111] p-5"><span className="text-xs font-bold tracking-widest text-[#d4a72c]">TRAXTOR LINEUP TOOL</span><h1 className="mt-2 text-2xl font-black">شماتیک ترکیب تیم</h1><p className="mt-2 text-sm text-white/45">آرایش را انتخاب یا جایگاه بازیکنان را آزادانه جابه‌جا کنید.</p><div className="mt-6 space-y-3">
+   <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="عنوان" className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3"/><input value={subtitle} onChange={e=>setSubtitle(e.target.value)} placeholder="زیرعنوان" className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3"/>
+   <div className="grid grid-cols-2 gap-2"><input value={tournament} onChange={e=>setTournament(e.target.value)} placeholder="تورنمنت" className="rounded-xl border border-white/10 bg-black/30 px-3 py-3"/><input value={match} onChange={e=>setMatch(e.target.value)} placeholder="وضعیت" className="rounded-xl border border-white/10 bg-black/30 px-3 py-3"/></div>
+   <div className="grid grid-cols-2 gap-2"><input value={coach} onChange={e=>setCoach(e.target.value)} placeholder="نام سرمربی" className="rounded-xl border border-white/10 bg-black/30 px-3 py-3"/><label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 text-sm"><Upload size={15}/> عکس سرمربی<input type="file" accept="image/*" className="hidden" onChange={e=>e.target.files?.[0]&&read(e.target.files[0],setCoachImage)}/></label></div>
+   <input value={brand} onChange={e=>setBrand(e.target.value)} placeholder="آیدی رسانه" className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3"/>
+   <div className="grid grid-cols-2 gap-2"><select value={formation} onChange={e=>applyFormation(e.target.value)} className="rounded-xl border border-white/10 bg-[#181818] px-4 py-3"><option>4-3-3</option><option>4-2-3-1</option><option>3-4-3</option></select><button onClick={()=>setFormation("custom")} className="rounded-xl border border-[#d4a72c]/30 bg-[#d4a72c]/10 px-4 py-3 text-sm font-bold text-[#d4a72c]">آرایش سفارشی</button></div>
+   <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-white/15 bg-black/20 px-4 py-3 text-sm"><span className="flex items-center gap-2"><Upload size={16}/> لوگوی رسانه</span><span className="text-[#d4a72c]">انتخاب<input type="file" accept="image/*" className="hidden" onChange={e=>e.target.files?.[0]&&read(e.target.files[0],setLogo)}/></span></label>
+   <div className="h-px bg-white/10"/>
+   {players.map((p,i)=><div key={i} className="rounded-2xl border border-white/10 bg-black/20 p-3"><div className="mb-2 flex justify-between text-xs text-[#d4a72c]">بازیکن {fa(String(i+1))}<label className="cursor-pointer text-white/50"><ImagePlus size={14} className="inline"/> عکس<input type="file" accept="image/*" className="hidden" onChange={e=>e.target.files?.[0]&&read(e.target.files[0],v=>update(i,"image",v))}/></label></div><div className="grid grid-cols-[1fr_65px] gap-2"><input value={p.name} onChange={e=>update(i,"name",e.target.value)} placeholder="نام بازیکن" className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm"/><input value={p.number} onChange={e=>update(i,"number",e.target.value)} placeholder="شماره" className="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-sm"/><input value={p.position} onChange={e=>update(i,"position",e.target.value)} placeholder="پست" className="col-span-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm"/></div></div>)}
+   <div className="flex gap-2"><button onClick={download} disabled={downloading} className="flex-1 rounded-xl bg-[#d71920] px-4 py-3 font-bold">{downloading?"در حال ساخت...":"دانلود PNG"}</button><button onClick={reset} className="h-12 w-12 rounded-xl border border-white/10 bg-white/5"><RotateCcw size={18}/></button></div>
+  </div></section>
+  <section className="flex items-start justify-center rounded-3xl border border-white/10 bg-[#0d0d0d] p-3 md:p-6"><div className="w-full max-w-[540px] overflow-auto rounded-2xl bg-black p-2"><div ref={canvas} style={{width:1080,height:1350,transform:"scale(.5)",transformOrigin:"top left",marginBottom:-675}} className="relative overflow-hidden bg-[#090909] text-white"><div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_10%,rgba(215,25,32,.38),transparent_28%),linear-gradient(160deg,#070707,#17090b 55%,#080808)]"/><div className="absolute inset-0 opacity-10" style={{backgroundImage:"linear-gradient(25deg,transparent 0 47%,#d71920 47% 49%,transparent 49%),linear-gradient(-25deg,transparent 0 52%,#d4a72c 52% 54%,transparent 54%)"}}/>
+   <div className="relative h-full px-[70px] py-[55px]"><div className="flex items-start justify-between"><div><div className="text-[24px] font-black tracking-[8px] text-[#d4a72c]">TRAXTOR</div><h2 className="mt-2 text-[58px] font-black">{title}</h2><div className="mt-2 text-[21px] font-bold text-white/35">{subtitle} • {tournament}</div><div className="mt-3 inline-block rounded-full border border-[#d71920]/50 px-5 py-2 text-[19px] text-[#d71920]">{match}</div></div>{logo?<img src={logo} className="h-[100px] w-[100px] rounded-full border-4 border-[#d4a72c] object-contain p-2"/>:<div className="flex h-[100px] w-[100px] items-center justify-center rounded-full border-4 border-[#d71920] text-[35px] font-black">T</div>}</div>
+    <div data-pitch className="relative mt-8 h-[900px] overflow-hidden rounded-[42px] border-2 border-white/10 bg-[#102318] touch-none"><div className="absolute inset-0 opacity-25" style={{backgroundImage:"linear-gradient(rgba(255,255,255,.05) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.05) 2px,transparent 2px)",backgroundSize:"70px 70px"}}/><div className="absolute inset-[35px] rounded-[28px] border-2 border-white/20"/><div className="absolute left-1/2 top-1/2 h-[130px] w-[130px] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/20"/><div className="absolute left-[8%] right-[8%] top-1/2 h-px bg-white/20"/><div className="absolute left-[8%] right-[8%] top-[4%] h-[145px] rounded-b-[35px] border-x-2 border-b-2 border-white/20"/><div className="absolute bottom-[4%] left-[8%] right-[8%] h-[145px] rounded-t-[35px] border-x-2 border-t-2 border-white/20"/>
+      {players.map((p,i)=><div key={i} onPointerDown={e=>{setDrag(i);(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)}} onPointerMove={e=>drag===i&&move(i,e)} onPointerUp={()=>setDrag(null)} className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-grab select-none active:cursor-grabbing" style={{left:`${p.x}%`,top:`${p.y}%`}}><div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full border-[6px] border-[#d71920] bg-[#121212] shadow-xl">{p.image?<img src={p.image} className="h-full w-full rounded-full object-cover"/>:<span className="text-[30px] font-black text-white/20">{fa(String(i+1))}</span>}<span className="absolute -right-2 -top-2 flex h-[38px] w-[38px] items-center justify-center rounded-full bg-[#d4a72c] text-[18px] font-black text-black">{fa(p.number||String(i+1))}</span></div><div className="mt-2 min-w-[155px] rounded-lg border border-white/10 bg-black/85 px-3 py-2 text-center"><div className="text-[21px] font-black">{p.name||`بازیکن ${fa(String(i+1))}`}</div><div className="text-[14px] font-bold text-[#d4a72c]">{p.position||"بازیکن"}</div></div></div>)}
     </div>
-  </main>;
+    <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4"><div className="flex items-center gap-3">{coachImage?<img src={coachImage} className="h-[58px] w-[58px] rounded-full object-cover ring-2 ring-[#d4a72c]"/>:<div className="h-[58px] w-[58px] rounded-full bg-white/5"/>}<div><div className="text-[16px] text-white/40">سرمربی</div><div className="text-[22px] font-black">{coach}</div></div></div><div className="text-[20px] font-bold text-white/35">{brand}</div></div></div>
+  </div></div></section>
+ </div></main>;
 }
