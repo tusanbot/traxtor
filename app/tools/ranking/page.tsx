@@ -1,2 +1,2 @@
-import RankingTool from "@/components/ranking/RankingTool";
-export default function RankingPage(){return <RankingTool/>;}
+import RankingPersistence from "@/components/ranking/RankingPersistence";
+export default function RankingPage(){return <RankingPersistence/>;}
