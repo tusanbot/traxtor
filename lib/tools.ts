@@ -2,6 +2,7 @@ import { BarChart3, CircleUserRound, LayoutTemplate, Newspaper, Shield, Trophy, 
 export type Tool={id:string;title:string;description:string;category:string;icon:typeof Trophy;available:boolean;themeIds?:string[];supportsCustomFields?:boolean};
 export const tools:Tool[]=[
 {id:"top-players",title:"۵ بازیکن برتر",description:"ساخت طرح حرفه‌ای رتبه‌بندی پنج بازیکن برتر با عکس، تیم و امتیاز.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
+{id:"ranking",title:"طرح‌های آماری و رتبه‌بندی",description:"یک ابزار چندکاره برای بهترین بازیکنان، گلزنان، پاسورها، کلین‌شیت و دیگر شاخص‌های آماری.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"lineup",title:"ترکیب تیم",description:"ساخت شماتیک ترکیب تیم روی زمین فوتبال با آرایش دلخواه.",category:"ترکیب",icon:Users,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"player-card",title:"کارت بازیکن",description:"ساخت کارت گرافیکی بازیکن همراه با مشخصات و آمار.",category:"بازیکنان",icon:CircleUserRound,available:true,themeIds:["tractor-red","stadium-night","classic-red"]},
 {id:"team-stats",title:"آمار تیم",description:"نمایش آمار و عملکرد یک تیم در قالب یک طرح گرافیکی.",category:"آمار",icon:BarChart3,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
@@ -12,8 +13,5 @@ export const tools:Tool[]=[
 {id:"match-result",title:"نتیجه بازی",description:"ساخت طرح نتیجه مسابقه با لوگو، نتیجه و اطلاعات بازی.",category:"مسابقات",icon:Shield,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"match-stats",title:"آمار بازی",description:"ساخت طرح گرافیکی مقایسه آمار مسابقه بین دو تیم.",category:"آمار",icon:BarChart3,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"player-comparison",title:"مقایسه دو بازیکن",description:"مقایسه حرفه‌ای دو بازیکن با عکس، مشخصات و آمار قابل تنظیم.",category:"بازیکنان",icon:GitCompareArrows,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
-{id:"top-scorers",title:"گلزنان برتر",description:"ساخت طرح رتبه‌بندی گلزنان با عکس، شماره و آمار قابل تنظیم.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
-{id:"top-assists",title:"برترین پاسورها",description:"ساخت طرح رتبه‌بندی پاس گل با عکس، شماره و آمار قابل تنظیم.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
-{id:"goalkeepers",title:"برترین دروازه‌بان‌ها",description:"ساخت طرح رتبه‌بندی دروازه‌بان‌ها بر اساس کلین‌شیت و آمار دروازه‌بانی.",category:"آمار و رتبه‌بندی",icon:Award,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"custom-template",title:"قالب اختصاصی",description:"ساخت و شخصی‌سازی قالب‌های گرافیکی برای رسانه.",category:"قالب‌ها",icon:LayoutTemplate,available:false},
 ];
