@@ -1,6 +1,18 @@
 export type RankingMetric = { id: string; label: string; suffix?: string; accent?: boolean };
-export type RankingPlayer = { id: string; name: string; number?: string; image?: string; stats: Record<string,string|number> };
-export type RankingConfig = { title: string; metric: string; players: RankingPlayer[]; descending?: boolean };
+export type RankingPlayer = {
+  id: string;
+  name: string;
+  team?: string;
+  number?: string;
+  image?: string;
+  games?: string | number;
+  goals?: string | number;
+  assists?: string | number;
+  rating?: string | number;
+  cleanSheets?: string | number;
+  stats: Record<string,string|number>;
+};
+export type RankingConfig<T extends RankingPlayer = RankingPlayer> = { title: string; metric: string; players: T[]; descending?: boolean };
 
 export const rankingMetrics: RankingMetric[] = [
   { id: "goals", label: "گل", suffix: "گل", accent: true },
@@ -12,18 +24,19 @@ export const rankingMetrics: RankingMetric[] = [
 ];
 
 export function rankingValue(player: RankingPlayer, metric: string): number {
-  const value = player.stats[metric];
+  const direct = player[metric as keyof RankingPlayer];
+  const value = direct !== undefined && typeof direct !== "object" ? direct : player.stats[metric];
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-export function rankPlayers(players: RankingPlayer[], metric: string, descending = true): RankingPlayer[] {
+export function rankPlayers<T extends RankingPlayer>(players: T[], metric: string, descending = true): T[] {
   return [...players].sort((a,b) => {
     const diff = rankingValue(b, metric) - rankingValue(a, metric);
     return descending ? diff : -diff;
   });
 }
 
-export function getRankedPlayers(config: RankingConfig) {
+export function getRankedPlayers<T extends RankingPlayer>(config: RankingConfig<T>): T[] {
   return rankPlayers(config.players, config.metric, config.descending ?? true);
 }
