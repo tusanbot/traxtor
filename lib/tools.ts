@@ -13,5 +13,6 @@ export const tools:Tool[]=[
 {id:"match-stats",title:"آمار بازی",description:"ساخت طرح گرافیکی مقایسه آمار مسابقه بین دو تیم.",category:"آمار",icon:BarChart3,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"player-comparison",title:"مقایسه دو بازیکن",description:"مقایسه حرفه‌ای دو بازیکن با عکس، مشخصات و آمار قابل تنظیم.",category:"بازیکنان",icon:GitCompareArrows,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"top-scorers",title:"گلزنان برتر",description:"ساخت طرح رتبه‌بندی گلزنان با عکس، شماره و آمار قابل تنظیم.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
+{id:"top-assists",title:"برترین پاسورها",description:"ساخت طرح رتبه‌بندی پاس گل با عکس، شماره و آمار قابل تنظیم.",category:"آمار و رتبه‌بندی",icon:Trophy,available:true,themeIds:["tractor-red","stadium-night","classic-red"],supportsCustomFields:true},
 {id:"custom-template",title:"قالب اختصاصی",description:"ساخت و شخصی‌سازی قالب‌های گرافیکی برای رسانه.",category:"قالب‌ها",icon:LayoutTemplate,available:false},
 ];
