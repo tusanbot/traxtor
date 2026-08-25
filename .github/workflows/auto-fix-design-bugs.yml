@@ -19,46 +19,32 @@ jobs:
           from pathlib import Path
           root=Path('.')
           for p in (root/'components').rglob('*.tsx'):
-              s=p.read_text(encoding='utf-8')
-              s=s.replace('🐺','⚽').replace('@tractorfan1970','tractorfan1970')
+              s=p.read_text(encoding='utf-8').replace('🐺','⚽').replace('@tractorfan1970','tractorfan1970')
               p.write_text(s,encoding='utf-8')
-
           p=root/'components/league-table/LeagueTableTool.tsx'; s=p.read_text(encoding='utf-8')
           s=s.replace('<span>#</span><span className="text-right">تیم</span><span>ب</span><span>و</span><span>م</span><span>خ</span><span>ز</span><span>خ</span><span>ام</span>', '<span>#</span><span className="text-right">تیم</span><span>بازی</span><span>برد</span><span>مساوی</span><span>باخت</span><span>زده</span><span>خورده</span><span>امتیاز</span>')
           p.write_text(s,encoding='utf-8')
-
           p=root/'components/match-stats/MatchStatsTool.tsx'; s=p.read_text(encoding='utf-8')
-          old='style={{width:`${Math.min(100,Number(s.home)||0)}%`}}'
-          new='style={{width:`${Math.max(0,Math.min(100,((Number(s.home)||0)/(Math.max(Number(s.home)||0,Number(s.away)||0)||1))*100))}%`}}'
-          s=s.replace(old,new)
+          s=s.replace('style={{width:`${Math.min(100,Number(s.home)||0)}%`}}','style={{width:`${Math.max(0,Math.min(100,((Number(s.home)||0)/(Math.max(Number(s.home)||0,Number(s.away)||0)||1))*100))}%`}}')
           p.write_text(s,encoding='utf-8')
-
           p=root/'components/match-result/MatchResultTool.tsx'; s=p.read_text(encoding='utf-8')
-          s=s.replace('className="text-[105px] font-black leading-none"', 'className="flex items-center justify-center gap-5 text-[105px] font-black leading-none"')
-          s=s.replace(' <span className="mx-5 text-[#d4a72c]">-</span> ', ' <span className="text-[#d4a72c]">-</span> ')
+          s=s.replace('className="text-[105px] font-black leading-none"','className="flex items-center justify-center gap-5 text-[105px] font-black leading-none"').replace(' <span className="mx-5 text-[#d4a72c]">-</span> ',' <span className="text-[#d4a72c]">-</span> ')
           p.write_text(s,encoding='utf-8')
-
           scaler=root/'components/PreviewScaler.tsx'
-          if not scaler.exists():
-              scaler.write_text("""'use client';\nimport { ReactNode, useEffect, useRef, useState } from 'react';\nexport default function PreviewScaler({children}:{children:ReactNode}){\n const ref=useRef<HTMLDivElement>(null); const [scale,setScale]=useState(1);\n useEffect(()=>{const el=ref.current;if(!el)return;const ro=new ResizeObserver(([e])=>setScale(Math.min(1,e.contentRect.width/1080)));ro.observe(el);return()=>ro.disconnect()},[]);\n return <div ref={ref} className=\"relative w-full max-w-[1080px] aspect-[1080/1350] overflow-hidden\"><div style={{width:1080,height:1350,transform:`scale(${scale})`,transformOrigin:'top left'}}>{children}</div></div>\n}\n""",encoding='utf-8')
-
+          if not scaler.exists(): scaler.write_text("""'use client';\nimport { ReactNode, useEffect, useRef, useState } from 'react';\nexport default function PreviewScaler({children}:{children:ReactNode}){const ref=useRef<HTMLDivElement>(null);const [scale,setScale]=useState(1);useEffect(()=>{const el=ref.current;if(!el)return;const ro=new ResizeObserver(([e])=>setScale(Math.min(1,e.contentRect.width/1080)));ro.observe(el);return()=>ro.disconnect()},[]);return <div ref={ref} className=\"relative w-full max-w-[1080px] aspect-[1080/1350] overflow-hidden\"><div style={{width:1080,height:1350,transform:`scale(${scale})`,transformOrigin:'top left'}}>{children}</div></div>}\n""",encoding='utf-8')
           for name in ['TeamStatsTool.tsx','NewsCardTool.tsx','MatchStatsTool.tsx','LeagueTableTool.tsx','MatchResultTool.tsx']:
               p=next((root/'components').rglob(name),None)
               if not p: continue
               s=p.read_text(encoding='utf-8')
               if 'PreviewScaler' in s: continue
-              import_marker='import { toPng } from "html-to-image";'
-              s=s.replace(import_marker, import_marker+'\nimport PreviewScaler from "@/components/PreviewScaler";')
-              section=s.find('<section className="flex min-w-0')
-              div=s.find('<div ref={ref}',section)
-              end=s.find('</section>',div)
-              if section>=0 and div>=0 and end>=0:
-                  s=s[:div]+'<PreviewScaler>'+s[div:end]+'</PreviewScaler>'+s[end:]
+              s=s.replace('import { toPng } from "html-to-image";','import { toPng } from "html-to-image";\nimport PreviewScaler from "@/components/PreviewScaler";')
+              section=s.find('<section className="flex min-w-0'); div=s.find('<div ref={ref}',section); end=s.find('</section>',div)
+              if section>=0 and div>=0 and end>=0: s=s[:div]+'<PreviewScaler>'+s[div:end]+'</PreviewScaler>'+s[end:]
               p.write_text(s,encoding='utf-8')
           PY
       - name: Validate
         run: |
-          npm ci
+          npm install
           npm run build
       - name: Commit
         run: |
