@@ -1,0 +1,56 @@
+name: auto-fix-design-bugs
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  fix:
+    if: ${{ !contains(github.event.head_commit.message, '[auto-fix]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Apply fixes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('.')
+          for p in (root/'components').rglob('*.tsx'):
+              s=p.read_text(encoding='utf-8')
+              s=s.replace('🐺','⚽').replace('@tractorfan1970','tractorfan1970')
+              p.write_text(s,encoding='utf-8')
+          p=root/'components/league-table/LeagueTableTool.tsx'; s=p.read_text(encoding='utf-8')
+          s=s.replace('<span>#</span><span className="text-right">تیم</span><span>ب</span><span>و</span><span>م</span><span>خ</span><span>ز</span><span>خ</span><span>ام</span>', '<span>#</span><span className="text-right">تیم</span><span>بازی</span><span>برد</span><span>مساوی</span><span>باخت</span><span>زده</span><span>خورده</span><span>امتیاز</span>')
+          p.write_text(s,encoding='utf-8')
+          p=root/'components/match-stats/MatchStatsTool.tsx'; s=p.read_text(encoding='utf-8')
+          old='style={{width:`${Math.min(100,Number(s.home)||0)}%`}}'
+          new='style={{width:`${Math.max(0,Math.min(100,((Number(s.home)||0)/(Math.max(Number(s.home)||0,Number(s.away)||0)||1))*100))}%`}}'
+          s=s.replace(old,new)
+          p.write_text(s,encoding='utf-8')
+          p=root/'components/match-result/MatchResultTool.tsx'; s=p.read_text(encoding='utf-8')
+          s=s.replace('className="text-[105px] font-black leading-none"', 'className="flex items-center justify-center gap-5 text-[105px] font-black leading-none"')
+          s=s.replace(' <span className="mx-5 text-[#d4a72c]">-</span> ', ' <span className="text-[#d4a72c]">-</span> ')
+          p.write_text(s,encoding='utf-8')
+          for name in ['TeamStatsTool.tsx','NewsCardTool.tsx','MatchStatsTool.tsx','LeagueTableTool.tsx','MatchResultTool.tsx']:
+              p=next((root/'components').rglob(name),None)
+              if not p: continue
+              s=p.read_text(encoding='utf-8')
+              s=s.replace('className="relative w-full max-w-full overflow-hidden', 'className="relative w-full max-w-full aspect-[1080/1350] overflow-hidden')
+              s=s.replace('className="relative overflow-hidden bg-[#090909]', 'className="relative w-full max-w-full aspect-[1080/1350] overflow-hidden bg-[#090909]')
+              s=s.replace('className="relative overflow-hidden bg-[#080808]', 'className="relative w-full max-w-full aspect-[1080/1350] overflow-hidden bg-[#080808]')
+              p.write_text(s,encoding='utf-8')
+          PY
+      - name: Validate
+        run: |
+          npm ci
+          npm run build
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add components
+          git diff --cached --quiet || git commit -m 'fix: polish graphic previews and statistics [auto-fix]'
+          git push
