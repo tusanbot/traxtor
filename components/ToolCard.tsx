@@ -23,8 +23,20 @@ export default function ToolCard({ tool }: Props) {
 
   const routes: Record<string, string> = {
     "top-players": "/tools/top-players",
+    ranking: "/tools/ranking",
     lineup: "/tools/lineup",
     "player-card": "/tools/player-card",
+    "team-stats": "/tools/team-stats",
+    "news-card": "/tools/news-card",
+    "league-table": "/tools/league-table",
+    transfer: "/tools/transfer",
+    "player-week": "/tools/player-week",
+    "match-result": "/tools/match-result",
+    "match-stats": "/tools/match-stats",
+    "player-comparison": "/tools/player-comparison",
+    "top-scorers": "/tools/top-scorers",
+    "top-assists": "/tools/top-assists",
+    goalkeepers: "/tools/goalkeepers",
   };
 
   if (tool.available && routes[tool.id]) {
