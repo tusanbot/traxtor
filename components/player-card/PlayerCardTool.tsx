@@ -57,7 +57,7 @@ export default function PlayerCardTool() {
               <div className="mt-10 flex items-center justify-end gap-5"><div className="rounded-[26px] border-2 border-[#d4a72c]/70 bg-[#d4a72c]/10 px-7 py-4 text-right shadow-[0_15px_40px_rgba(0,0,0,.25)]"><div className="text-[22px] font-bold text-white/45">امتیاز</div><div className="mt-1 text-[82px] font-black leading-none text-[#d4a72c]">{faDigits(rating)}</div></div></div>
               {customLabel && customValue && <div className="mt-8 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[.04] px-6 py-5"><span className="text-[25px] font-bold text-white/45">{customLabel}</span><span className="text-[48px] font-black text-white">{faDigits(customValue)}</span></div>}
             </div>
-            <div className="mt-auto flex items-end justify-between border-t border-white/10 pt-6"><div className="text-[72px] font-black text-white/[.08]">{faDigits(number)}</div><div className="text-right"><div className="text-[20px] font-bold tracking-[4px] text-white/35">@tractorfan1970</div><div className="mt-2 text-[20px] font-bold text-[#d71920]">TRACTOR FAN PAGE</div></div></div>
+            <div className="mt-auto flex items-end justify-between border-t border-white/10 pt-6"><div className="text-[72px] font-black text-white/[.08]">{faDigits(number)}</div><div className="text-right"><div className="text-[20px] font-bold tracking-[4px] text-white/35">tractorfan1970</div><div className="mt-2 text-[20px] font-bold text-[#d71920]">TRACTOR FAN PAGE</div></div></div>
           </div>
         </div></div></section>
       </div>

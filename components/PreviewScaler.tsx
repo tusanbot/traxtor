@@ -1,0 +1,3 @@
+'use client';
+import { ReactNode, useEffect, useRef, useState } from 'react';
+export default function PreviewScaler({children}:{children:ReactNode}){const ref=useRef<HTMLDivElement>(null);const [scale,setScale]=useState(1);useEffect(()=>{const el=ref.current;if(!el)return;const ro=new ResizeObserver(([e])=>setScale(Math.min(1,e.contentRect.width/1080)));ro.observe(el);return()=>ro.disconnect()},[]);return <div ref={ref} className="relative w-full max-w-[1080px] aspect-[1080/1350] overflow-hidden"><div style={{width:1080,height:1350,transform:`scale(${scale})`,transformOrigin:'top left'}}>{children}</div></div>}

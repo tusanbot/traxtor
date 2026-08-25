@@ -46,7 +46,7 @@ export default function TopPlayersTool() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState("۵ بازیکن برتر هفته");
   const [subtitle, setSubtitle] = useState("TRACTOR TOP 5 PLAYERS");
-  const [brand, setBrand] = useState("@tractorfan1970");
+  const [brand, setBrand] = useState("tractorfan1970");
   const [logo, setLogo] = useState("");
   const [font, setFont] = useState("Vazirmatn");
   const [themeId, setThemeId] = useState("tractor-red");
@@ -66,7 +66,7 @@ export default function TopPlayersTool() {
   const reset = () => {
     setTitle("۵ بازیکن برتر هفته");
     setSubtitle("TRACTOR TOP 5 PLAYERS");
-    setBrand("@tractorfan1970");
+    setBrand("tractorfan1970");
     setLogo("");
     setFont("Vazirmatn");
     setThemeId("tractor-red");
@@ -216,7 +216,7 @@ export default function TopPlayersTool() {
                 </div>
 
                 <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-6 text-[18px] font-bold tracking-[2px] text-white/35">
-                  <span>{brand || "@tractorfan1970"}</span>
+                  <span>{brand || "tractorfan1970"}</span>
                   <span style={{ color: theme.colors.accent }}>TRACTOR FAN PAGE</span>
                 </div>
               </div>
