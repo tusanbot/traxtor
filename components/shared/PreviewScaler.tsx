@@ -16,16 +16,33 @@ export default function PreviewScaler({ children, width = 1080, height = 1350, m
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
-    const update = () => setScale(Math.min(1, host.clientWidth / width));
+    const update = () => {
+      const available = Math.min(host.clientWidth, maxWidth);
+      setScale(Math.min(1, available / width));
+    };
     update();
     const observer = new ResizeObserver(update);
     observer.observe(host);
     return () => observer.disconnect();
-  }, [width]);
+  }, [width, maxWidth]);
 
   return (
-    <div ref={hostRef} className="w-full overflow-hidden" style={{ maxWidth, aspectRatio: `${width}/${height}` }}>
-      <div style={{ width, height, transform: `scale(${scale})`, transformOrigin: "top center" }}>
+    <div
+      ref={hostRef}
+      className="relative w-full overflow-hidden"
+      style={{ maxWidth, aspectRatio: `${width}/${height}` }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "50%",
+          width,
+          height,
+          transform: `translateX(-50%) scale(${scale})`,
+          transformOrigin: "top center",
+        }}
+      >
         {children}
       </div>
     </div>
