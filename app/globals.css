@@ -9,8 +9,8 @@ button,input,textarea,select { font:inherit; }
 button { cursor:pointer; }
 ::selection { background:rgba(215,25,32,.3); }
 
-/* Responsive graphic preview: the artwork keeps its 1080×1350 export size,
-   while the on-screen layout uses CSS zoom so the complete preview fits. */
+/* Responsive graphic preview: keep the 1080×1350 export dimensions while
+   making the on-screen artwork fit the available viewport. */
 section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto,
 section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto {
   overflow:hidden!important;
@@ -22,9 +22,6 @@ section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-au
   margin-bottom:0!important;
   zoom:50%;
 }
-
-/* Smaller preview columns / phones. Discrete values avoid relying on CSS
-   division in zoom(), while keeping the complete artwork visible. */
 @media (max-width:1100px) {
   section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"],
   section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"] { zoom:46%; }
@@ -48,16 +45,39 @@ section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-au
   section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"] { zoom:30%; }
 }
 
-/* Persian font families available to graphic components. */
 .font-vazirmatn { font-family:"Vazirmatn",sans-serif; }
 .font-estedad { font-family:"Estedad",sans-serif; }
 .font-shabnam { font-family:"Shabnam",sans-serif; }
 .font-arabic { font-family:"Noto Sans Arabic",sans-serif; }
 
-/* Subtle football / supporter atmosphere without affecting exported artwork dimensions. */
+/* Neutral football-supporter motif; intentionally no wolf/animal imagery. */
 section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::before,
-section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::before { content:""; position:absolute; z-index:1; right:-55px; bottom:35px; width:300px; height:300px; opacity:.055; background-repeat:no-repeat; background-size:contain; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cpath d='M150 20c-55 0-96 35-110 83-10 34-3 68 18 94l-23 51 51-23c20 11 41 16 64 16 55 0 101-35 111-86 12-63-34-135-111-135Z' fill='none' stroke='%23D71920' stroke-width='9'/%3E%3Cpath d='M92 120c22-20 44-30 58-30s36 10 58 30M110 174c12 9 25 13 40 13s28-4 40-13' fill='none' stroke='%23D4A72C' stroke-width='7' stroke-linecap='round'/%3E%3Ccircle cx='116' cy='133' r='8' fill='%23fff'/%3E%3Ccircle cx='184' cy='133' r='8' fill='%23fff'/%3E%3C/svg%3E"); pointer-events:none; }
+section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::before {
+  content:"";
+  position:absolute;
+  z-index:1;
+  right:-45px;
+  bottom:25px;
+  width:300px;
+  height:300px;
+  opacity:.055;
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cpath d='M150 20 255 62v83c0 62-43 105-105 135-62-30-105-73-105-135V62Z' fill='none' stroke='%23D71920' stroke-width='9'/%3E%3Cpath d='M100 135h100M150 85v100' stroke='%23D4A72C' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
 section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::after,
-section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::after { content:"⚽"; position:absolute; z-index:1; left:-40px; top:250px; font-size:280px; line-height:1; opacity:.035; filter:grayscale(1); pointer-events:none; }
+section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"]::after {
+  content:"⚽";
+  position:absolute;
+  z-index:1;
+  left:-40px;
+  top:250px;
+  font-size:280px;
+  line-height:1;
+  opacity:.035;
+  filter:grayscale(1);
+  pointer-events:none;
+}
 section.flex.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"] img[alt=""],
 section.flex.items-start.justify-center > div.w-full.max-w-\[540px\].overflow-auto > div[style*="width: 1080px"] img[alt=""] { border-radius:9999px; }
