@@ -10,7 +10,7 @@ export type RankingPlayer = {
   assists?: string | number;
   rating?: string | number;
   cleanSheets?: string | number;
-  stats: Record<string,string|number>;
+  stats: Record<string, string | number>;
 };
 export type RankingConfig<T extends RankingPlayer = RankingPlayer> = { title: string; metric: string; players: T[]; descending?: boolean };
 
@@ -31,12 +31,15 @@ export function rankingValue(player: RankingPlayer, metric: string): number {
 }
 
 export function rankPlayers<T extends RankingPlayer>(players: T[], metric: string, descending = true): T[] {
-  return [...players].sort((a,b) => {
+  return [...players].sort((a, b) => {
     const diff = rankingValue(b, metric) - rankingValue(a, metric);
     return descending ? diff : -diff;
   });
 }
 
-export function getRankedPlayers<T extends RankingPlayer>(config: RankingConfig<T>): T[] {
-  return rankPlayers(config.players, config.metric, config.descending ?? true);
+export function getRankedPlayers<T extends RankingPlayer>(config: RankingConfig<T>): T[];
+export function getRankedPlayers<T extends RankingPlayer>(players: T[], metric: string, descending?: boolean): T[];
+export function getRankedPlayers<T extends RankingPlayer>(configOrPlayers: RankingConfig<T> | T[], metric?: string, descending = true): T[] {
+  if (Array.isArray(configOrPlayers)) return rankPlayers(configOrPlayers, metric ?? "rating", descending);
+  return rankPlayers(configOrPlayers.players, configOrPlayers.metric, configOrPlayers.descending ?? true);
 }
