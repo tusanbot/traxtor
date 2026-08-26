@@ -9,14 +9,24 @@ type PreviewScalerProps = {
   maxWidth?: number;
 };
 
-export default function PreviewScaler({ children, width = 1080, height = 1350, maxWidth = 720 }: PreviewScalerProps) {
+export default function PreviewScaler({
+  children,
+  width = 1080,
+  height = 1350,
+  maxWidth = 720,
+}: PreviewScalerProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
-    const update = () => setScale(Math.min(1, host.clientWidth / width));
+
+    const update = () => {
+      const availableWidth = host.clientWidth;
+      setScale(availableWidth > 0 ? availableWidth / width : 1);
+    };
+
     update();
     const observer = new ResizeObserver(update);
     observer.observe(host);
@@ -24,8 +34,23 @@ export default function PreviewScaler({ children, width = 1080, height = 1350, m
   }, [width]);
 
   return (
-    <div ref={hostRef} className="w-full overflow-hidden" style={{ maxWidth, aspectRatio: `${width}/${height}` }}>
-      <div style={{ width, height, transform: `scale(${scale})`, transformOrigin: "top center" }}>
+    <div
+      ref={hostRef}
+      className="relative w-full overflow-hidden"
+      style={{
+        maxWidth,
+        aspectRatio: `${width} / ${height}`,
+      }}
+    >
+      <div
+        className="absolute left-1/2 top-0"
+        style={{
+          width,
+          height,
+          transform: `translateX(-50%) scale(${scale})`,
+          transformOrigin: "top center",
+        }}
+      >
         {children}
       </div>
     </div>
